@@ -1,4 +1,4 @@
-a. Una gramática LL(1) sin recursión a derecha
+## a. Una gramática LL(1) sin recursión a derecha
 
 S:Q a
 Q:b
@@ -6,7 +6,7 @@ Q:c
 
 "S:Q a\nQ:b\nQ:c"
 
-b.Una gramática LL(1) con recursión a derecha?
+## b. Una gramática LL(1) con recursión a derecha?
 
 S:a S
 S:Q
@@ -14,7 +14,7 @@ Q:b
 
 "S:a S\nS:Q\nQ:b"
 
-c. Una gramática LL(1) que incluya lambda en sus derivaciones
+## c. Una gramática LL(1) que incluya lambda en sus derivaciones
 
 S:Q a
 Q:b
@@ -22,7 +22,7 @@ Q:lambda
 
 "S:Q a\nQ:b\nQ:lambda"
 
-d. Una gramática LL(1) que no incluya lambda en sus derivaciones
+## d. Una gramática LL(1) que no incluya lambda en sus derivaciones
 
 S:a Q
 Q:b R
@@ -31,7 +31,7 @@ R:d
 
 "S:a Q\nQ:b R\nQ:c R\nR:d"
 
-e. Una gramática LL(1) con reglas de producción innecesarias.
+## e. Una gramática LL(1) con reglas de producción innecesarias.
 
 S:P a
 P:P
@@ -39,7 +39,7 @@ P:b
 
 "S:P a\nP:P\nP:b"
 
-f. Una gramática LL(1) con símbolos inaccesibles desde el axioma
+## f. Una gramática LL(1) con símbolos inaccesibles desde el axioma
 
 S:a Q
 Q:b Q
@@ -48,7 +48,7 @@ P:d
 
 "S:a Q\nQ:b Q\nQ:c\nP:d"
 
-g. Una gramática LL(1) con no terminales no generativos.
+## g. Una gramática LL(1) con no terminales no generativos.
 
 S:Q a
 S:P
@@ -57,14 +57,14 @@ P:P x
 
 "S:Q a\nS:P\nQ:c\nP:P x"
 
-a.h
+## a.h Una gramática NO LL(1) sin recursión a derecha
 
 S:Q a
 Q:Q b
 
 "S:Q a\nQ:Q b"
 
-b.h.Una gramática LL(1) con recursión a derecha
+## b.h. Una gramática NO LL(1) con recursión a derecha
 
 S:a S
 S:Q
@@ -72,7 +72,7 @@ Q:Q b
 
 "S:a S\nS:Q\nQ:Q b"
 
-c.h. Una gramática LL(1) que incluya lambda en sus derivaciones
+## c.h. Una gramática NO LL(1) que incluya lambda en sus derivaciones
 
 S:Q a
 S:P
@@ -82,7 +82,7 @@ Q:lambda
 
 "S:Q a\nS:P\nP:b\nQ:b\nQ:lambda"
 
-d.h. Una gramática  NO LL(1) que no incluya lambda en sus derivaciones
+## d.h. Una gramática NO LL(1) que no incluya lambda en sus derivaciones
 
 S:a Q
 Q:b R
@@ -91,7 +91,7 @@ R:R d
 
 "S:a Q\nQ:b R\nQ:c R\nR:R d"
 
-e.h. Una gramática NO LL(1) con reglas de producción innecesarias.
+## e.h. Una gramática NO LL(1) con reglas de producción innecesarias.
 
 S:P a
 S:Q
@@ -101,7 +101,7 @@ P:b
 
 "S:P a\nS:Q\nQ:b\nP:P\nP:b"
 
-f.h. Una gramática NO LL(1) con símbolos inaccesibles desde el axioma
+## f.h. Una gramática NO LL(1) con símbolos inaccesibles desde el axioma
 
 S:a Q
 Q:Q b
@@ -109,7 +109,7 @@ P:d
 
 "S:a Q\nQ:Q b\nP:d"
 
-g.h. Una gramática NO LL(1) con no terminales no generativos.
+## g.h. Una gramática NO LL(1) con no terminales no generativos.
 
 S:Q a
 S:P
@@ -118,7 +118,7 @@ P:P c
 
 "S:Q a\nS:P\nQ:c\nP:P c"
 
-i. Una gramática NO LL(1) con recursión a izquierda
+## i. Una gramática NO LL(1) con recursión a izquierda
 
 S:Q a
 Q:A
@@ -127,4 +127,3 @@ A:b
 B:b
 
 "S:Q a\nQ:A\nQ:B\nA:b\nB:b"
-
