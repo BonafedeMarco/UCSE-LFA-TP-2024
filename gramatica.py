@@ -28,7 +28,7 @@ class Gramatica:
         for regla in reglas:
             antecedente, consecuente = regla.split(":")
             nuevas_reglas.setdefault(antecedente, {"producciones":{},"follow":[]})
-            nuevas_reglas[antecedente]["producciones"].update({consecuente: [[],[]]}) 
+            nuevas_reglas[antecedente]["producciones"].update({consecuente: {"first":[],"select":[]}}) 
         
         # TODO: Detección y resolución de problemas detectados en la gramática
 
