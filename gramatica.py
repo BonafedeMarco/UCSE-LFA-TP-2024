@@ -13,7 +13,14 @@ class Gramatica:
         """
         TODO: Docstrings
         """
-        return f"{self.reglas}"
+        for nt in self.reglas:
+            print(f"{nt}:")
+            for prod in (self.reglas[nt]['producciones']):
+                print(f"  {prod}:{self.reglas[nt]['producciones'][prod]}")
+            print(f"  Follows:{self.reglas[nt]['follow']}")
+            
+        return f"EsLL(1)? => {self.EsLL1}"
+
 
 
 
@@ -39,11 +46,11 @@ class Gramatica:
             for produccion in nuevas_reglas[nt]["producciones"]:
                 simbolos = produccion.split()
                 for simbolo in simbolos:
-                    if simbolo.isupper():
+                    if simbolo.isupper() and simbolo != nt:
                         nt_consecuente.append(simbolo)
 
         inaccesibles = set(nt_antecedente[1:]) - set(nt_consecuente)
-        print(inaccesibles)
+        print(f"inaccesibles: {inaccesibles}")
 
         for simbolo in inaccesibles:
             nuevas_reglas.pop(simbolo)
