@@ -6,6 +6,7 @@ class Gramatica:
         """
         self.EsLL1 = False
         self.reglas = {}
+        self.debug = True
 
 
 
@@ -50,13 +51,26 @@ class Gramatica:
                         nt_consecuente.append(simbolo)
 
         inaccesibles = set(nt_antecedente[1:]) - set(nt_consecuente)
-        print(f"inaccesibles: {inaccesibles}")
+        
+        if self.debug:
+            print(f"Inaccesibles: {inaccesibles}") 
 
         for simbolo in inaccesibles:
             nuevas_reglas.pop(simbolo)
 
         # Reglas de producción innecesarias
-
+        producciones_innecesarias = []
+        for nt in nuevas_reglas:
+            for produccion in nuevas_reglas[nt]["producciones"]:
+                if nt == produccion:
+                    producciones_innecesarias.append(nt)
+        
+        if self.debug:
+            print(f"Innecesarias: {producciones_innecesarias}")
+        
+        for nt in producciones_innecesarias:
+            nuevas_reglas[nt]["producciones"].pop(nt)
+        
         # No terminales no generativos
 
         # TODO: Obtener First, Follow y Select
