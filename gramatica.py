@@ -72,6 +72,39 @@ class Gramatica:
             nuevas_reglas[nt]["producciones"].pop(nt)
         
         # No terminales no generativos
+        generativos = set()
+
+        algo_nuevo = True
+        while algo_nuevo:
+            algo_nuevo = False
+            for nt in nuevas_reglas:
+                for produccion in nuevas_reglas[nt]["producciones"]:
+                    if nt not in generativos:
+                        cc_gen = [c in generativos for c in produccion.split() if c.isupper()]
+                        if all(cc_gen):
+                            algo_nuevo = True
+                            generativos.add(nt)
+        
+        no_generativos = set(nuevas_reglas.keys()) - generativos
+
+        if self.debug:
+            print(f"NT generativos: {generativos}")
+            print(f"NT no generativos: {no_generativos}")
+        
+        for ng in no_generativos:
+            nuevas_reglas.pop(ng)
+        
+        reglas_superfluas = []
+        for nt in nuevas_reglas:
+            for produccion in nuevas_reglas[nt]["producciones"]:
+                simbolos = produccion.split()
+                for simbolo in simbolos:
+                    if simbolo in no_generativos:
+                        reglas_superfluas.append((nt, produccion))
+                        break
+
+        for nt, produccion in reglas_superfluas:
+            nuevas_reglas[nt]["producciones"].pop(produccion)
 
         # TODO: Obtener First, Follow y Select
         # evaluar si es o no LL1 para self.EsLL1
