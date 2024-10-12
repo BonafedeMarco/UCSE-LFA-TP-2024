@@ -118,7 +118,7 @@ class Gramatica:
             while self.EsLL1:
                 selects = []
                 for produccion in nuevas_reglas[nt]["producciones"]:
-                    selects.extend(produccion["select"])
+                    selects.extend(nuevas_reglas[nt]["producciones"][produccion]["select"])
                 self.EsLL1 = len(selects) == len(set(selects))
 
         # Seteo
