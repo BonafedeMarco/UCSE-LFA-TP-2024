@@ -4,7 +4,7 @@ class Gramatica:
         """
         TODO: Docstrings
         """
-        self.EsLL1 = False
+        self.EsLL1 = True
         self.reglas = {}
         self.debug = True
 
@@ -107,7 +107,19 @@ class Gramatica:
             nuevas_reglas[nt]["producciones"].pop(produccion)
 
         # TODO: Obtener First, Follow y Select
-        # evaluar si es o no LL1 para self.EsLL1
+        # First
+
+        # Follow
+
+        # Select
+        
+        # Es LL1 ?
+        for nt in nuevas_reglas:
+            while self.EsLL1:
+                selects = []
+                for produccion in nuevas_reglas[nt]["producciones"]:
+                    selects.extend(produccion["select"])
+                self.EsLL1 = len(selects) == len(set(selects))
 
         # Seteo
         self.reglas = nuevas_reglas
