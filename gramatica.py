@@ -134,13 +134,13 @@ class Gramatica:
                 self.reglas[nt]["producciones"][produccion]["select"] = select
 
         # Es LL1 ?
-        while self.EsLL1:
-            for nt in self.reglas:
-                selects = []
-                for produccion in self.reglas[nt]["producciones"]:
-                    selects.extend(self.reglas[nt]["producciones"][produccion]["select"])
-                self.EsLL1 = len(selects) == len(set(selects))
-            break
+        for nt in self.reglas:
+            selects = []
+            for produccion in self.reglas[nt]["producciones"]:
+                selects.extend(self.reglas[nt]["producciones"][produccion]["select"])
+            self.EsLL1 = len(selects) == len(set(selects))
+            if not self.EsLL1:
+                break
     
 
 
