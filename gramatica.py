@@ -106,25 +106,45 @@ class Gramatica:
         for nt, produccion in reglas_superfluas:
             nuevas_reglas[nt]["producciones"].pop(produccion)
 
-        # TODO: Obtener First, Follow y Select
-        # First
-
-        # Follow
-
-        # Select
-        
-        # Es LL1 ?
-        for nt in nuevas_reglas:
-            while self.EsLL1:
-                selects = []
-                for produccion in nuevas_reglas[nt]["producciones"]:
-                    selects.extend(nuevas_reglas[nt]["producciones"][produccion]["select"])
-                self.EsLL1 = len(selects) == len(set(selects))
-
         # Seteo
         self.reglas = nuevas_reglas
 
+        # Obtener First, Follow y Select
+        # First
+        for nt in self.reglas:
+            self.obtener_first(nt)
 
+        # TODO: Follow
+
+        # TODO: Select
+        
+        # Es LL1 ?
+        while self.EsLL1:
+            for nt in self.reglas:
+                selects = []
+                for produccion in self.reglas[nt]["producciones"]:
+                    selects.extend(self.reglas[nt]["producciones"][produccion]["select"])
+                self.EsLL1 = len(selects) == len(set(selects))
+            break
+
+
+    
+    def obtener_first(self, nt):
+        firsts = []
+        for produccion in self.reglas[nt]["producciones"]:
+            if len(self.reglas[nt]["producciones"][produccion]["first"]) == 0:
+                simbolos = produccion.split()
+                for simbolo in simbolos:
+                    if simbolo.islower():
+                        self.reglas[nt]["producciones"][produccion]["first"].append(simbolo)
+                        firsts.append(simbolo)
+                    else:
+                        firsts.extend(self.obtener_first(simbolo))
+                        self.reglas[nt]["producciones"][produccion]["first"] = list(set(firsts))
+                    if "lambda" not in firsts:
+                        break
+        
+        return firsts
 
     def evaluar_cadena(self, cadena):
         """
