@@ -116,11 +116,8 @@ class Gramatica:
             self.obtener_first(nt)
 
         # TODO: Follow
-        distinguido = None
-        if self.reglas:
-            distinguido = [nt for nt in self.reglas.keys()][0]
-        if distinguido is not None:
-            self.reglas[str(distinguido)]["follow"].append("$")
+        distinguido = [nt for nt in self.reglas.keys()][0]
+        self.reglas[distinguido]["follow"].append("$")
 
 
 
