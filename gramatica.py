@@ -8,7 +8,7 @@ class Gramatica:
         """
         self.EsLL1 = True
         self.reglas = {}
-        self.debug = True
+        self.debug = False
 
 
 
@@ -113,14 +113,14 @@ class Gramatica:
         # Obtener First, Follow y Select
         # First
         for nt in self.reglas:
-            self.obtener_first(nt)
+            self.obtener_firsts(nt)
 
         # TODO: Follow
         distinguido = [nt for nt in self.reglas.keys()][0]
         self.reglas[distinguido]["follow"].append("$")
 
         for nt_fol in self.reglas:
-            self.obtener_follow(nt_fol)
+            self.obtener_follows(nt_fol)
 
         # Select
         for nt in self.reglas:
@@ -144,7 +144,7 @@ class Gramatica:
     
 
 
-    def obtener_first(self, nt):
+    def obtener_firsts(self, nt):
         firsts = []
         for produccion in self.reglas[nt]["producciones"]:
             if len(self.reglas[nt]["producciones"][produccion]["first"]) == 0:
@@ -154,7 +154,7 @@ class Gramatica:
                         self.reglas[nt]["producciones"][produccion]["first"].append(simbolo)
                         firsts.append(simbolo)
                     else:
-                        firsts.extend(self.obtener_first(simbolo))
+                        firsts.extend(self.obtener_firsts(simbolo))
                         self.reglas[nt]["producciones"][produccion]["first"] = list(set(firsts))
                     if "lambda" not in firsts:
                         break
@@ -163,25 +163,49 @@ class Gramatica:
 
 
     
-    def obtener_follow(self, nt_fol):
+    def obtener_follows(self, nt_fol):
         follows = []
-        if len(self.reglas[nt_fol]["follow"]) != 0:
-            follows.extend(self.reglas[nt_fol]["follow"])
         for nt in self.reglas:
-            for produccion in self.reglas[nt]:
+            for produccion in self.reglas[nt]["producciones"]:
                 simbolos = produccion.split()
                 if nt_fol in simbolos:
                     for s_index, simbolo in enumerate(simbolos):
                         if simbolo == nt_fol:
                             ext = []
-                            if s_index != len(simbolos):
-                                if simbolos[s_index+1].isupper():
-                                    for subprod in self.reglas[simbolos[s_index+1]]["producciones"]:
-                                        ext.extend(self.reglas[simbolos[s_index+1]]["producciones"][subprod]["first"])
+
+                            #################################
+
+                            pos = s_index + 1
+
+                            while True:
+
+                                if pos < len(simbolos):
+                                    lookup = simbolos[pos]
+                                    conjunto = "first"
                                 else:
-                                    ext.append(simbolos[s_index+1])
-                            else:
-                                ext.extend(obtener_follow(nt))
+                                    lookup = nt
+                                    conjunto = "follow"
+
+                                if lookup.isupper(): # Le sigue un NO Terminal
+                                    if conjunto == "first":
+                                        for subprod in self.reglas[lookup]["producciones"]:
+                                            ext.extend(self.reglas[lookup]["producciones"][subprod]["first"])
+                                        
+                                    else:
+                                        self.obtener_follows(lookup)
+                                        ext.extend(self.reglas[lookup]["follow"])
+                                
+                                else: # Le sigue un Terminal
+                                    ext.append(simbolos[lookup])
+
+                                if "lambda" not in ext:
+                                    break
+
+                                ext.remove("lambda")
+                                pos += 1
+
+                            #################################
+                            
                             follows.extend(ext)
 
         self.reglas[nt_fol]["follow"].extend(list(set(follows)))
