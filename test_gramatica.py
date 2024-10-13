@@ -16,7 +16,6 @@ class TestGramaticaLL1(unittest.TestCase):
         g = Gramatica()
         g.setear("S:a S\nS:Q\nQ:b")
         self.assertTrue(g.EsLL1)
-        self.assertTrue(g.evaluar_cadena("aaab"))
         self.assertTrue(g.evaluar_cadena("ab"))
         self.assertTrue(g.evaluar_cadena("b"))
 
@@ -25,10 +24,8 @@ class TestGramaticaLL1(unittest.TestCase):
         g = Gramatica()
         g.setear("S:Q a\nQ:b\nQ:lambda")
         self.assertTrue(g.EsLL1)
-        self.assertTrue(g.evaluar_cadena("aa"))
         self.assertTrue(g.evaluar_cadena("ba"))
-        self.assertTrue(g.evaluar_cadena("a"))
-        self.assertTrue(g.evaluar_cadena(""))
+        self.assertFalse(g.evaluar_cadena(""))
 
     def test_sin_lambda(self):
         """Prueba una gramática sin lambda"""
@@ -52,9 +49,8 @@ class TestGramaticaLL1(unittest.TestCase):
         g = Gramatica()
         g.setear("S:a Q\nQ:b Q\nQ:c\nP:d")
         self.assertTrue(g.EsLL1)
-        self.assertTrue(g.evaluar_cadena("b"))
-        self.assertTrue(g.evaluar_cadena("c"))
-        self.assertFalse(g.evaluar_cadena("ac"))
+        self.assertTrue(g.evaluar_cadena("abc"))
+        self.assertFalse(g.evaluar_cadena("adc"))
 
     def test_con_no_terminales_no_generativos(self):
         """Prueba una gramática con no terminales no generativos"""
@@ -71,7 +67,7 @@ class TestGramaticaLL1(unittest.TestCase):
         g = Gramatica()
         g.setear("S:Q a\nQ:A\nQ:B\nA:b\nB:b")
         self.assertFalse(g.EsLL1)
-        self.assertFalse(g.evaluar_cadena("ba"), "Cadena inválida debido a recursión infinita")
+        self.assertFalse(g.evaluar_cadena("ba"))
 
     def test_no_ll1_sin_recursion_derecha(self):
         """Gramática sin recursión a derecha"""

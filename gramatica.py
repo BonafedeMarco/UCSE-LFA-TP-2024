@@ -117,8 +117,11 @@ class Gramatica:
             self.obtener_first(nt)
 
         # TODO: Follow
-        distinguido = [nt for nt in self.reglas.keys()][0]
-        self.reglas[distinguido]["follow"].append("$")
+        distinguido = None
+        if self.reglas:
+            distinguido = [nt for nt in self.reglas.keys()][0]
+        if distinguido is not None:
+            self.reglas[str(distinguido)]["follow"].append("$")
 
 
 
@@ -132,17 +135,14 @@ class Gramatica:
                     first.extend(self.reglas[nt]["follow"])
                 select.extend(first)
                 self.reglas[nt]["producciones"][produccion]["select"] = select
-        
+      
         # Es LL1 ?
-        while self.EsLL1:
+        if self.EsLL1:
             for nt in self.reglas:
                 selects = []
                 for produccion in self.reglas[nt]["producciones"]:
                     selects.extend(self.reglas[nt]["producciones"][produccion]["select"])
                 self.EsLL1 = len(selects) == len(set(selects))
-            break
-
-
     
     def obtener_first(self, nt):
         firsts = []
@@ -162,6 +162,44 @@ class Gramatica:
         return firsts
 
     def evaluar_cadena(self, cadena):
-        """
-        TODO: Docstrings
-        """
+
+        pila = ["$", next(iter(self.reglas))]
+        entrada = cadena + "$"
+        indice_entrada = 0
+        no_valido = False
+
+        while pila:
+            X = pila.pop()
+            if indice_entrada < len(entrada):
+                a = entrada[indice_entrada]
+            else:
+                print("Fin de la cadena inesperado")
+                no_valido = True
+        
+            if X.islower() or X == "$":
+                if X == a:
+                    indice_entrada += 1
+                else:
+                    print(f"Se esperaba {X}, pero se encontró {a}")
+                    no_valido = True
+            else:
+                producciones_posibles = [p for p in self.reglas[X]["producciones"] if a in self.reglas[X]["producciones"][p]["select"]]
+
+                if not producciones_posibles:
+                    print(f"No hay producción para {X} y {a}")
+                    no_valido = True
+
+                if len(producciones_posibles) > 1:
+                    print("La gramática no es LL(1)")
+                    self.EsLL1 = False
+                    no_valido = True
+
+                if producciones_posibles:
+                    produccion = producciones_posibles[0]
+                    nueva_produccion = produccion.split()[::-1]
+                    pila.extend(nueva_produccion)
+
+        if no_valido:
+            return False
+        else:
+            return True
