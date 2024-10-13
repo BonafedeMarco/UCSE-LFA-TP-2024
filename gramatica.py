@@ -1,3 +1,5 @@
+from copy import copy
+
 class Gramatica:
 
     def __init__(self):
@@ -118,7 +120,18 @@ class Gramatica:
         distinguido = [nt for nt in self.reglas.keys()][0]
         self.reglas[distinguido]["follow"].append("$")
 
-        # TODO: Select
+
+
+        # Select
+        for nt in self.reglas:
+            for produccion in self.reglas[nt]["producciones"]:
+                first = copy(self.reglas[nt]["producciones"][produccion]["first"])
+                select = []
+                if "lambda" in first:
+                    first.remove("lambda")
+                    first.extend(self.reglas[nt]["follow"])
+                select.extend(first)
+                self.reglas[nt]["producciones"][produccion]["select"] = select
         
         # Es LL1 ?
         while self.EsLL1:
