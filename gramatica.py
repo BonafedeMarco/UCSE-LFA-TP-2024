@@ -26,7 +26,6 @@ class Gramatica:
 
 
 
-
     def setear(self, gramatica):
         """
         TODO: Docstrings
@@ -40,7 +39,7 @@ class Gramatica:
             nuevas_reglas.setdefault(antecedente, {"producciones":{},"follow":[]})
             nuevas_reglas[antecedente]["producciones"].update({consecuente: {"first":[],"select":[]}}) 
         
-        # TODO: Detección y resolución de problemas detectados en la gramática
+        # Detección y resolución de problemas detectados en la gramática
         # Símbolos inaccesibles desde el axioma
         nt_antecedente = []
         nt_consecuente = []
@@ -135,15 +134,17 @@ class Gramatica:
                     first.extend(self.reglas[nt]["follow"])
                 select.extend(first)
                 self.reglas[nt]["producciones"][produccion]["select"] = select
-      
+
         # Es LL1 ?
-        if self.EsLL1:
+        while self.EsLL1:
             for nt in self.reglas:
                 selects = []
                 for produccion in self.reglas[nt]["producciones"]:
                     selects.extend(self.reglas[nt]["producciones"][produccion]["select"])
                 self.EsLL1 = len(selects) == len(set(selects))
+            break
     
+
     def obtener_first(self, nt):
         firsts = []
         for produccion in self.reglas[nt]["producciones"]:
@@ -160,6 +161,8 @@ class Gramatica:
                         break
         
         return firsts
+
+    
 
     def evaluar_cadena(self, cadena):
 
