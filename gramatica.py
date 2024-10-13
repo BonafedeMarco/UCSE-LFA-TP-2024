@@ -115,6 +115,8 @@ class Gramatica:
             self.obtener_first(nt)
 
         # TODO: Follow
+        distinguido = [nt for nt in self.reglas.keys()][0]
+        self.reglas[distinguido]["follow"].append("$")
 
         # TODO: Select
         
