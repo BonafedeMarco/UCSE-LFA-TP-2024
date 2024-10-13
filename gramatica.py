@@ -119,7 +119,8 @@ class Gramatica:
         distinguido = [nt for nt in self.reglas.keys()][0]
         self.reglas[distinguido]["follow"].append("$")
 
-
+        for nt_fol in self.reglas:
+            self.obtener_follow(nt_fol)
 
         # Select
         for nt in self.reglas:
@@ -142,6 +143,7 @@ class Gramatica:
             break
     
 
+
     def obtener_first(self, nt):
         firsts = []
         for produccion in self.reglas[nt]["producciones"]:
@@ -159,7 +161,34 @@ class Gramatica:
         
         return firsts
 
+
     
+    def obtener_follow(self, nt_fol):
+        follows = []
+        if len(self.reglas[nt_fol]["follow"]) != 0:
+            follows.extend(self.reglas[nt_fol]["follow"])
+        for nt in self.reglas:
+            for produccion in self.reglas[nt]:
+                simbolos = produccion.split()
+                if nt_fol in simbolos:
+                    for s_index, simbolo in enumerate(simbolos):
+                        if simbolo == nt_fol:
+                            ext = []
+                            if s_index != len(simbolos):
+                                if simbolos[s_index+1].isupper():
+                                    for subprod in self.reglas[simbolos[s_index+1]]["producciones"]:
+                                        ext.extend(self.reglas[simbolos[s_index+1]]["producciones"][subprod]["first"])
+                                else:
+                                    ext.append(simbolos[s_index+1])
+                            else:
+                                ext.extend(obtener_follow(nt))
+                            follows.extend(ext)
+
+        self.reglas[nt_fol]["follow"].extend(list(set(follows)))
+
+        return follows
+
+
 
     def evaluar_cadena(self, cadena):
 
