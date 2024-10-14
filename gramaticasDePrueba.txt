@@ -61,18 +61,24 @@ P:P x
 
 ## a.h Una gramática NO LL(1) sin recursión a derecha
 
-S:Q a
-Q:Q b
+S:Q a 
+S:P
+P:b 
+Q:b
 
-"S:Q a\nQ:Q b"
+
+"S:Q a\nS:P\nP:b\nQ:b"
 
 ## b.h. Una gramática NO LL(1) con recursión a derecha
 
 S:a S
+S:P
+S:b
 S:Q
 Q:Q b
+P:b
 
-"S:a S\nS:Q\nQ:Q b"
+"S:a S\nS:P\nS:b\nS:Q\nQ:Q b\nP:b"
 
 ## c.h. Una gramática NO LL(1) que incluya lambda en sus derivaciones
 
@@ -88,10 +94,10 @@ Q:lambda
 
 S:a Q
 Q:b R
-Q:c R
-R:R d
+Q:b 
+R:x
 
-"S:a Q\nQ:b R\nQ:c R\nR:R d"
+"S:a Q\nQ:b R\nQ:b\nR:x"
 
 ## e.h. Una gramática NO LL(1) con reglas de producción innecesarias.
 
