@@ -168,7 +168,7 @@ class Gramatica:
         for nt in self.reglas:
             for produccion in self.reglas[nt]["producciones"]:
                 simbolos = produccion.split()
-                if nt_fol in simbolos:
+                if nt_fol in simbolos and nt != nt_fol:
                     for s_index, simbolo in enumerate(simbolos):
                         if simbolo == nt_fol:
                             ext = []
