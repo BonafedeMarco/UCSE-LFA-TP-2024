@@ -207,8 +207,12 @@ class Gramatica:
                             #################################
                             
                             follows.extend(ext)
+        
+        # Para remover duplicados
+        new_follows = list(set(follows))
+        new_follows.extend(self.reglas[nt_fol]["follow"])
 
-        self.reglas[nt_fol]["follow"].extend(list(set(follows)))
+        self.reglas[nt_fol]["follow"] = list(set(new_follows))
 
         return follows
 
