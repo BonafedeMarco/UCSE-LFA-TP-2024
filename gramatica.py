@@ -148,10 +148,10 @@ class Gramatica:
         firsts = []
         for produccion in self.reglas[nt]["producciones"]:
             if len(self.reglas[nt]["producciones"][produccion]["first"]) == 0:
-                firsts = []
                 simbolos = produccion.split()
                 for simbolo in simbolos:
                     if simbolo[0].isupper():
+                        firsts = []
                         firsts.extend(self.obtener_firsts(simbolo))
                         self.reglas[nt]["producciones"][produccion]["first"] = list(set(firsts))
                     else:
