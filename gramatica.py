@@ -3,9 +3,6 @@ from copy import copy
 class Gramatica:
 
     def __init__(self):
-        """
-        TODO: Docstrings
-        """
         self.EsLL1 = True
         self.reglas = {}
         self.debug = False
@@ -13,23 +10,84 @@ class Gramatica:
 
 
     def __str__(self):
-        """
-        TODO: Docstrings
-        """
+        max_len_consecuente = 0
+        max_len_fi = 0
+        max_len_fo = 0
+        max_len_se = 0
+        padding_spaces = 1
+        has_lambda = False
+
         for nt in self.reglas:
-            print(f"{nt}:")
-            for prod in (self.reglas[nt]['producciones']):
-                print(f"  {prod}:{self.reglas[nt]['producciones'][prod]}")
-            print(f"  Follows:{self.reglas[nt]['follow']}")
+            if max_len_fo < len(self.reglas[nt]["follow"]):
+                max_len_fo = len(self.reglas[nt]["follow"])
             
-        return f"EsLL(1)? => {self.EsLL1}"
+            for produccion in self.reglas[nt]["producciones"]:
+                if max_len_consecuente < len(produccion):
+                    max_len_consecuente = len(produccion)
+
+                if "lambda" in self.reglas[nt]["producciones"][produccion]["first"]:
+                    has_lambda = True
+
+                if max_len_fi < len(self.reglas[nt]["producciones"][produccion]["first"]):
+                    max_len_fi = len(self.reglas[nt]["producciones"][produccion]["first"])
+
+                
+                if max_len_se < len(self.reglas[nt]["producciones"][produccion]["select"]):
+                    max_len_se = len(self.reglas[nt]["producciones"][produccion]["select"])
+        
+        max_len_fi = (max_len_fi * 3) + (max_len_fi - 1) * 2 + 2
+        max_len_fo = (max_len_fo * 3) + (max_len_fo - 1) * 2 + 2
+        max_len_se = (max_len_se * 3) + (max_len_se - 1) * 2 + 2
+
+        if has_lambda:
+            max_len_fi += 5
+
+        line_length = 3 + max_len_consecuente + max_len_fi + max_len_fo + max_len_se + padding_spaces * 5 + 9
+
+        print("-" * line_length)
+        print("|" + " " * padding_spaces, end = "")
+        print("A", end = "")
+        print(" " * padding_spaces + "|", end = "")
+        print(" " * padding_spaces + "C" + " " * (max_len_consecuente - len("C")), end = "")
+        print(" " * padding_spaces + "|", end = "")
+        print(" " * padding_spaces + "Fi" + " " * (max_len_fi - len("Fi")) , end = "")
+        print(" " * padding_spaces + "|", end = "")
+        print(" " * padding_spaces + "Fo" + " " * (max_len_fo - len("Fo")), end = "")
+        print(" " * padding_spaces + "|", end = "")
+        print(" " * padding_spaces + "Se" + " " * (max_len_se - len("Se")), end = "")
+        print(" " * padding_spaces + "|")
+        print("-" * line_length)
+        for nt in self.reglas:
+            first_line = True
+            fo = str(self.reglas[nt]["follow"])
+            for produccion in self.reglas[nt]["producciones"]:
+                fi = str(self.reglas[nt]["producciones"][produccion]["first"])
+                se = str(self.reglas[nt]["producciones"][produccion]["select"])
+                print("|" + " " * padding_spaces, end = "")
+                if first_line:
+                    print(nt, end = "")
+                else:
+                    print(" " * padding_spaces, end = "")
+                print(" " * padding_spaces + "|", end = "")
+                print(" " * padding_spaces + produccion + " " * (max_len_consecuente - len(produccion)), end = "")
+                print(" " * padding_spaces + "|", end = "")
+                print(" " * padding_spaces + fi + " " * (max_len_fi - len(fi)) , end = "")
+                print(" " * padding_spaces + "|", end = "")
+                if first_line:
+                    print(" " * padding_spaces + fo + " " * (max_len_fo - len(fo)), end = "")
+                else:
+                    print(" " * padding_spaces + " " * max_len_fo, end = "")
+                print(" " * padding_spaces + "|", end = "")
+                print(" " * padding_spaces + se + " " * (max_len_se - len(se)), end = "")
+                print(" " * padding_spaces + "|")
+                first_line = False
+            print("-" * line_length)
+
+        return f"\nEsLL(1)? => {self.EsLL1}"
 
 
 
     def setear(self, gramatica):
-        """
-        TODO: Docstrings
-        """
         nuevas_reglas = {}
         
         # Parsing inicial
@@ -220,7 +278,6 @@ class Gramatica:
 
 
     def evaluar_cadena(self, cadena):
-
         if self.EsLL1:
             pila = ["$", next(iter(self.reglas))]
             entrada = cadena + "$"
