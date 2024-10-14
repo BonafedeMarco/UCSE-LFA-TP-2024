@@ -14,10 +14,10 @@ class TestGramaticaLL1(unittest.TestCase):
     def test_con_recursividad_derecha(self):
         """b. Prueba una gramática con recursión a derecha"""
         g = Gramatica()
-        g.setear("S:a S\nS:Q\nQ:b")
+        g.setear("S:P\nS:Q\nQ:b Q\nP:a P\nP:lambda")
         self.assertTrue(g.EsLL1)
-        self.assertTrue(g.evaluar_cadena("aab"))
-        self.assertTrue(g.evaluar_cadena("b"))
+        self.assertTrue(g.evaluar_cadena("aaa"))
+        self.assertFalse(g.evaluar_cadena("b"))
 
     def test_con_lambda(self):
         """c. Prueba una gramática con lambda"""
@@ -101,7 +101,7 @@ class TestGramaticaLL1(unittest.TestCase):
     def test_no_ll1_con_no_terminales_no_generativos(self):
         """h.g Gramática con un no terminal no generativo"""
         g = Gramatica()
-        g.setear("S:Q a\nS:P\nQ:c\nP:P c")
+        g.setear("S:Q a\nS:P\nS:R\nQ:c\nP:c\nR:R a")
         self.assertFalse(g.EsLL1)
     
     def test_recursion_izquierda(self):

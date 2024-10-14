@@ -8,11 +8,13 @@ Q:c
 
 ## b. Una gramática LL(1) con recursión a derecha?
 
-S:a S
+S:P
 S:Q
-Q:b
+Q:b Q
+P:a P
+P:lambda
 
-"S:a S\nS:Q\nQ:b"
+"S:P\nS:Q\nQ:b Q\nP:a P\nP:lambda"
 
 ## c. Una gramática LL(1) que incluya lambda en sus derivaciones
 
@@ -115,10 +117,12 @@ P:d
 
 S:Q a
 S:P
+S:R
 Q:c
-P:P c
+P:c
+R:R a
 
-"S:Q a\nS:P\nQ:c\nP:P c"
+"S:Q a\nS:P\nS:R\nQ:c\nP:c\nR:R a"
 
 ## i. Una gramática NO LL(1) con recursión a izquierda
 
