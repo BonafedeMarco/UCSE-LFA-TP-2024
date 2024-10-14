@@ -229,6 +229,10 @@ class Gramatica:
 
             while pila:
                 X = pila.pop()
+        
+                if X == 'lambda':
+                    continue
+
                 if indice_entrada < len(entrada):
                     a = entrada[indice_entrada]
                 else:
