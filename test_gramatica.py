@@ -65,13 +65,13 @@ class TestGramaticaLL1(unittest.TestCase):
     def test_no_ll1_sin_recursion_derecha(self):
         """h.a Gramática sin recursión a derecha"""
         g = Gramatica()
-        g.setear("S:Q a\nQ:Q b")
+        g.setear("S:Q a\nS:P\nP:b\nQ:b")
         self.assertFalse(g.EsLL1)
 
     def test_no_ll1_con_recursion_derecha(self):
         """h.b Gramática con recursión a derecha"""
         g = Gramatica()
-        g.setear("S:a S\nS:Q\nQ:Q b")
+        g.setear("S:a S\nS:P\nS:b\nS:Q\nQ:Q b\nP:b")
         self.assertFalse(g.EsLL1)
 
     def test_no_ll1_con_lambda(self):
@@ -83,7 +83,7 @@ class TestGramaticaLL1(unittest.TestCase):
     def test_no_ll1_sin_lambda(self):
         """h.d Gramática sin lambda"""
         g = Gramatica()
-        g.setear("S:a Q\nQ:b R\nQ:c R\nR:R d")
+        g.setear("S:a Q\nQ:b R\nQ:b\nR:x")
         self.assertFalse(g.EsLL1)
 
     def test_no_ll1_con_reglas_innecesarias(self):
@@ -95,7 +95,7 @@ class TestGramaticaLL1(unittest.TestCase):
     def test_no_ll1_con_simbolos_inaccesibles(self):
         """h.f Gramática con un símbolo inaccesible desde el axioma"""
         g = Gramatica()
-        g.setear("S:a Q\nQ:Q b\nP:d")
+        g.setear("S:a Q\nS:a R\nQ:b\nR:b\nP:d")
         self.assertFalse(g.EsLL1)
 
     def test_no_ll1_con_no_terminales_no_generativos(self):
