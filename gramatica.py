@@ -48,7 +48,7 @@ class Gramatica:
             for produccion in nuevas_reglas[nt]["producciones"]:
                 simbolos = produccion.split()
                 for simbolo in simbolos:
-                    if simbolo.isupper() and simbolo != nt:
+                    if simbolo[0].isupper() and simbolo != nt:
                         nt_consecuente.append(simbolo)
 
         inaccesibles = set(nt_antecedente[1:]) - set(nt_consecuente)
@@ -81,7 +81,7 @@ class Gramatica:
             for nt in nuevas_reglas:
                 for produccion in nuevas_reglas[nt]["producciones"]:
                     if nt not in generativos:
-                        cc_gen = [c in generativos for c in produccion.split() if c.isupper()]
+                        cc_gen = [c in generativos for c in produccion.split() if c[0].isupper()]
                         if all(cc_gen):
                             algo_nuevo = True
                             generativos.add(nt)
@@ -150,12 +150,12 @@ class Gramatica:
             if len(self.reglas[nt]["producciones"][produccion]["first"]) == 0:
                 simbolos = produccion.split()
                 for simbolo in simbolos:
-                    if simbolo.islower():
-                        self.reglas[nt]["producciones"][produccion]["first"].append(simbolo)
-                        firsts.append(simbolo)
-                    else:
+                    if simbolo[0].isupper():
                         firsts.extend(self.obtener_firsts(simbolo))
                         self.reglas[nt]["producciones"][produccion]["first"] = list(set(firsts))
+                    else:
+                        self.reglas[nt]["producciones"][produccion]["first"].append(simbolo)
+                        firsts.append(simbolo)
                     if "lambda" not in firsts:
                         break
         
@@ -186,7 +186,7 @@ class Gramatica:
                                     lookup = nt
                                     conjunto = "follow"
 
-                                if lookup.isupper(): # Le sigue un NO Terminal
+                                if lookup[0].isupper(): # Le sigue un NO Terminal
                                     if conjunto == "first":
                                         for subprod in self.reglas[lookup]["producciones"]:
                                             ext.extend(self.reglas[lookup]["producciones"][subprod]["first"])
@@ -233,7 +233,7 @@ class Gramatica:
                 print("Fin de la cadena inesperado")
                 no_valido = True
         
-            if X.islower() or X == "$":
+            if X[0].islower() or X == "$":
                 if X == a:
                     indice_entrada += 1
                 else:
