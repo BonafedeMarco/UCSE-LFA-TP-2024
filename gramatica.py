@@ -196,7 +196,7 @@ class Gramatica:
                                         ext.extend(self.reglas[lookup]["follow"])
                                 
                                 else: # Le sigue un Terminal
-                                    ext.append(simbolos[lookup])
+                                    ext.append(pos) 
 
                                 if "lambda" not in ext:
                                     break
