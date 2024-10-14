@@ -104,10 +104,12 @@ P:b
 ## f.h. Una gramática NO LL(1) con símbolos inaccesibles desde el axioma
 
 S:a Q
-Q:Q b
+S:a R
+Q:b
+R:b
 P:d
 
-"S:a Q\nQ:Q b\nP:d"
+"S:a Q\nS:a R\nQ:b\nR:b\nP:d"
 
 ## g.h. Una gramática NO LL(1) con no terminales no generativos.
 

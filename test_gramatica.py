@@ -112,9 +112,9 @@ class TestGramaticaLL1(unittest.TestCase):
         self.assertFalse(g.evaluar_cadena("ab"))
 
     def test_no_ll1_con_simbolos_inaccesibles(self):
-        """Gramática con un símbolo terminal inaccesible"""
+        """Gramática con un símbolo inaccesible desde axioma"""
         g = Gramatica()
-        g.setear("S:a Q\nQ:Q b\nP:d")
+        g.setear("S:a Q\nS:a R\nQ:b\nR:b\nP:d")
         self.assertFalse(g.EsLL1)
         self.assertTrue(g.evaluar_cadena("ab"))
         self.assertFalse(g.evaluar_cadena("d"))
