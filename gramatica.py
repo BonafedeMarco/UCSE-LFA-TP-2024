@@ -221,43 +221,39 @@ class Gramatica:
 
     def evaluar_cadena(self, cadena):
 
-        pila = ["$", next(iter(self.reglas))]
-        entrada = cadena + "$"
-        indice_entrada = 0
-        no_valido = False
+        if self.EsLL1:
+            pila = ["$", next(iter(self.reglas))]
+            entrada = cadena + "$"
+            indice_entrada = 0
+            cadena_valida = True
 
-        while pila:
-            X = pila.pop()
-            if indice_entrada < len(entrada):
-                a = entrada[indice_entrada]
-            else:
-                print("Fin de la cadena inesperado")
-                no_valido = True
-        
-            if X[0].islower() or X == "$":
-                if X == a:
-                    indice_entrada += 1
+            while pila:
+                X = pila.pop()
+                if indice_entrada < len(entrada):
+                    a = entrada[indice_entrada]
                 else:
-                    print(f"Se esperaba {X}, pero se encontró {a}")
-                    no_valido = True
-            else:
-                producciones_posibles = [p for p in self.reglas[X]["producciones"] if a in self.reglas[X]["producciones"][p]["select"]]
+                    print("Fin de la cadena inesperado")
+                    cadena_valida = False
+            
+                if X[0].islower() or X == "$":
+                    if X == a:
+                        indice_entrada += 1
+                    else:
+                        print(f"Se esperaba {X}, pero se encontró {a}")
+                        cadena_valida = False
+                else:
+                    producciones_posibles = [p for p in self.reglas[X]["producciones"] if a in self.reglas[X]["producciones"][p]["select"]]
 
-                if not producciones_posibles:
-                    print(f"No hay producción para {X} y {a}")
-                    no_valido = True
+                    if not producciones_posibles:
+                        print(f"No hay producción para {X} y {a}")
+                        cadena_valida = False
 
-                if len(producciones_posibles) > 1:
-                    print("La gramática no es LL(1)")
-                    self.EsLL1 = False
-                    no_valido = True
-
-                if producciones_posibles:
-                    produccion = producciones_posibles[0]
-                    nueva_produccion = produccion.split()[::-1]
-                    pila.extend(nueva_produccion)
-
-        if no_valido:
-            return False
+                    if producciones_posibles:
+                        produccion = producciones_posibles[0]
+                        nueva_produccion = produccion.split()[::-1]
+                        pila.extend(nueva_produccion)
         else:
-            return True
+            print("La gramática no es LL(1)")
+            cadena_valida = False
+
+        return cadena_valida
